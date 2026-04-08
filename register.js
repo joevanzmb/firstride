@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     // Clear previous errors
     document.querySelectorAll('.form-group').forEach(g => g.classList.remove('error'));
 
@@ -169,48 +169,78 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // ==========================================
+    // SUPABASE CONFIGURATION
+    // ==========================================
+    // Silakan ganti [YOUR_ANON_KEY] dengan key yang Anda dapatkan dari Settings > API
+    const SUPABASE_URL = 'https://uctaqoxtbubkmqvyltmi.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdGFxb3h0YnVia21xdnlsdG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYxMjAsImV4cCI6MjA5MTIzMjEyMH0.mTnYlg_Rfu0ZXNdXycXuTTr6VpJTG2WZQy7rPwuIDls';
+
+    let supabase;
+    try {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    } catch (err) {
+      console.error('Supabase initialization failed:', err);
+    }
+
     // Show loading state
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
     submitText.textContent = 'Processing...';
 
-    // Store to localStorage
-    setTimeout(() => {
-      const participant = {
-        id: Date.now(),
-        name: name,
-        phone: phone,
-        photo: photoDataURL,
-        registeredAt: new Date().toISOString()
-      };
-
-      // Get existing participants
-      let participants = [];
+    async function handleRegistration() {
       try {
-        participants = JSON.parse(localStorage.getItem('firstride_participants') || '[]');
-      } catch (e) {
-        participants = [];
+        if (!supabase) throw new Error('Database connection not ready');
+
+        // 1. Convert resized photo (base64) to Blob for upload
+        const response = await fetch(photoDataURL);
+        const blob = await response.blob();
+
+        // 2. Upload to Supabase Storage (Bucket: photo)
+        const fileName = `ride2026_${Date.now()}.jpg`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('photo')
+          .upload(fileName, blob, {
+            contentType: 'image/jpeg'
+          });
+
+        if (uploadError) throw uploadError;
+
+        // 3. Get Public URL for the uploaded photo
+        const { data: { publicUrl } } = supabase.storage
+          .from('photo')
+          .getPublicUrl(fileName);
+
+        // 4. Save Participant data to Database (Table: participants)
+        const { error: dbError } = await supabase
+          .from('participants')
+          .insert([
+            {
+              name: name,
+              phone: phone,
+              photo_url: publicUrl
+            }
+          ]);
+
+        if (dbError) throw dbError;
+
+        // Success!
+        showSuccess(name);
+
+      } catch (err) {
+        console.error('Registration error:', err);
+        alert('Gagal mendaftar: ' + (err.message || 'Terjadi kesalahan pada server'));
+
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+        submitText.textContent = 'Register Now';
       }
+    }
 
-      participants.push(participant);
+    // Execute the async registration
+    handleRegistration();
 
-      try {
-        localStorage.setItem('firstride_participants', JSON.stringify(participants));
-      } catch (e) {
-        // If localStorage is full, try to save without older photos
-        console.warn('localStorage full, attempting to save without old photos');
-        const simplified = participants.map((p, i) => {
-          if (i < participants.length - 1) {
-            return { ...p, photo: null };
-          }
-          return p;
-        });
-        localStorage.setItem('firstride_participants', JSON.stringify(simplified));
-      }
-
-      // Show success modal
-      showSuccess(name);
-    }, 1200);
   });
 
   // ==========================================
@@ -219,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function showSuccess(name) {
     const overlay = document.getElementById('successOverlay');
     const countdownEl = document.getElementById('countdown');
-    
+
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 
@@ -243,11 +273,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   const card = document.querySelector('.register-card');
   const backBtn = document.querySelector('.register-back');
-  
+
   setTimeout(() => {
     if (backBtn) backBtn.classList.add('visible');
   }, 200);
-  
+
   setTimeout(() => {
     if (card) card.classList.add('visible');
   }, 400);

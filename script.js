@@ -106,6 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     rootMargin: '0px 0px -40px 0px'
   });
 
+  // Make it accessible for dynamic content
+  window.revealObserver = revealObserver;
+
   revealElements.forEach(el => {
     revealObserver.observe(el);
   });
@@ -230,62 +233,84 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   // ==========================================
-  // LOAD REGISTERED PARTICIPANTS FROM LOCALSTORAGE
+  // LOAD REGISTERED PARTICIPANTS FROM SUPABASE
   // ==========================================
-  function loadRegisteredParticipants() {
-    const marquee = document.getElementById('participantsMarquee');
-    if (!marquee) return;
+  async function loadRegisteredParticipants() {
+    const grid = document.getElementById('participantsGrid');
+    const countEl = document.getElementById('participantsCount');
+    if (!grid || !countEl) return;
 
-    let participants = [];
+    // Use same config as register.js
+    const SUPABASE_URL = 'https://uctaqoxtbubkmqvyltmi.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdGFxb3h0YnVia21xdnlsdG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYxMjAsImV4cCI6MjA5MTIzMjEyMH0.mTnYlg_Rfu0ZXNdXycXuTTr6VpJTG2WZQy7rPwuIDls';
+    
+    // Initialize Supabase if not already done
+    let supabaseClient;
     try {
-      participants = JSON.parse(localStorage.getItem('firstride_participants') || '[]');
-    } catch (e) {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (err) {
+      console.error('Supabase init error:', err);
+    }
+
+    if (!supabaseClient) {
+      countEl.textContent = 'Gagal memuat data.';
       return;
     }
 
-    if (participants.length === 0) return;
+    try {
+      // 1. Fetch participants
+      const { data: participants, error } = await supabaseClient
+        .from('participants')
+        .select('*')
+        .order('created_at', { ascending: true });
 
-    // Find "Kamu?" placeholder cards to insert before them
-    const allCards = marquee.querySelectorAll('.participant-card');
-    const placeholderCards = [];
-    allCards.forEach(card => {
-      const nameEl = card.querySelector('.participant-name');
-      if (nameEl && nameEl.textContent.trim() === 'Kamu?') {
-        placeholderCards.push(card);
-      }
-    });
+      if (error) throw error;
 
-    // Create participant cards for each registered participant
-    function createParticipantCard(p) {
-      const card = document.createElement('div');
-      card.className = 'participant-card';
+      // 2. Update Count
+      const totalCount = participants.length;
+      countEl.textContent = `${totalCount} Rider Telah Terdaftar`;
 
-      const initials = p.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      // 3. Clear existing example data except Joevanz (if he's the admin)
+      // Or just clear all and we rebuild it
+      grid.innerHTML = '';
 
-      let avatarContent = '';
-      if (p.photo) {
-        avatarContent = `<img src="${p.photo}" alt="${p.name}">`;
-      } else {
-        avatarContent = `<div class="initials">${initials}</div>`;
-      }
-
-      card.innerHTML = `
-        <div class="participant-avatar">
-          ${avatarContent}
-        </div>
-        <div class="participant-name">${p.name}</div>
-        <div class="participant-role">Rider</div>
-      `;
-      return card;
-    }
-
-    // Insert before each placeholder card (both sets in marquee)
-    placeholderCards.forEach(placeholder => {
+      // 4. Render from Database
       participants.forEach(p => {
-        const card = createParticipantCard(p);
-        placeholder.parentNode.insertBefore(card, placeholder);
+        const card = document.createElement('div');
+        card.className = 'participant-card reveal';
+        
+        const initials = p.name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        
+        // Use uploaded photo if exists
+        let avatarHTML = `<div class="initials">${initials}</div>`;
+        if (p.photo_url) {
+          avatarHTML = `<img src="${p.photo_url}" alt="${p.name}">`;
+        }
+
+        card.innerHTML = `
+          <div class="participant-avatar">
+            ${avatarHTML}
+          </div>
+          <div class="participant-name">${p.name}</div>
+        `;
+        grid.appendChild(card);
       });
-    });
+
+      // Trigger animations for new elements
+      const newReveals = grid.querySelectorAll('.reveal');
+      if (window.revealObserver) {
+        newReveals.forEach(el => window.revealObserver.observe(el));
+      } else {
+        // Fallback if observer not found: just make them visible
+        newReveals.forEach(el => el.classList.add('active'));
+      }
+
+    } catch (err) {
+      console.error('Fetch participants error:', err);
+      countEl.textContent = 'Gagal memuat daftar rider.';
+    }
   }
 
   loadRegisteredParticipants();

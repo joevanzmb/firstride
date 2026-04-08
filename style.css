@@ -2155,7 +2155,22 @@ h6 {
 
 .participants {
   background: var(--color-bg);
-}/* ---------- Participants Grid (Static) ---------- */
+  text-align: center;
+}
+
+.participants-count {
+  display: inline-block;
+  background: rgba(196, 148, 74, 0.1);
+  color: var(--color-accent);
+  padding: 8px 24px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-top: 16px;
+  border: 1px solid rgba(196, 148, 74, 0.2);
+}
+
+/* ---------- Participants Grid (Static) ---------- */
 .participants-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -2186,6 +2201,12 @@ h6 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.participant-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .initials {
