@@ -180,76 +180,103 @@
             <line x1="9" y1="3" x2="9" y2="18" />
             <line x1="15" y1="6" x2="15" y2="21" />
           </svg> Rute & Destinasi</div>
-        <h2 class="section-title">Jalur Epik</h2>
-        <p class="section-subtitle">Menyusuri jalur terbaik Jawa Timur dengan panorama gunung, hutan, dan air terjun
-          spektakuler.</p>
-      </div>
+        <div class="route-timeline reveal">
+          <div class="route-node" style="--index: 0">
+            <div class="node-dot"></div>
+            <span class="node-city">Surabaya</span>
+          </div>
+          <div class="route-path-line" style="--index: 1"></div>
+          <div class="route-node" style="--index: 2">
+            <div class="node-dot"></div>
+            <span class="node-city">Malang</span>
+          </div>
+          <div class="route-path-line" style="--index: 3"></div>
+          <div class="route-node" style="--index: 4">
+            <div class="node-dot"></div>
+            <span class="node-city">Tumpang</span>
+          </div>
+          <div class="route-path-line" style="--index: 5"></div>
+          <div class="route-node" style="--index: 6">
+            <div class="node-dot"></div>
+            <span class="node-city">Ranupani</span>
+          </div>
+          <div class="route-path-line" style="--index: 7"></div>
+          <div class="route-node" style="--index: 8">
+            <div class="node-dot"></div>
+            <span class="node-city">Senduro</span>
+          </div>
+          <div class="route-path-line" style="--index: 9"></div>
+          <div class="route-node" style="--index: 10">
+            <div class="node-dot"></div>
+            <span class="node-city">Pronojiwo</span>
+          </div>
+        </div>
+        <!-- Route Path Visualization -->
+        <a href="https://maps.app.goo.gl/d39hWLaJfSz3beKV9" target="_blank" class="route-map-link reveal">
+          <div class="route-map-card">
+            <div class="route-map-visual">
+              <!-- Tempat gambar screenshot peta diletakkan -->
+              <img src="assets/images/map-route.jpg" alt="Peta Rute Surabaya - Pronojiwo"
+                onerror="this.src='https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'"
+                class="actual-map-img">
 
-      <!-- Route Path Visualization -->
-      <a href="https://maps.app.goo.gl/d39hWLaJfSz3beKV9" target="_blank" class="route-map-link reveal">
-        <div class="route-map-card">
-          <div class="route-map-visual">
-            <!-- Tempat gambar screenshot peta diletakkan -->
-            <img src="assets/images/map-route.jpg" alt="Peta Rute Surabaya - Pronojiwo"
-              onerror="this.src='https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'"
-              class="actual-map-img">
+              <div class="route-overlay-fade"></div>
 
-            <div class="route-overlay-fade"></div>
+              <div class="route-map-cta">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                Buka Rute di Google Maps
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px; opacity:0.7">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </a>
 
-            <div class="route-map-cta">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-              Buka Rute di Google Maps
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px; opacity:0.7">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
+        <p class="section-subtitle reveal" style="text-align: center; max-width: 600px; margin: 0 auto 64px;">Menyusuri
+          jalur
+          terbaik Jawa Timur dengan panorama gunung, hutan, dan air terjun spektakuler.</p>
+
+        <!-- Destination Cards -->
+        <div class="destination-grid stagger-children">
+          <div class="destination-card reveal" style="--child-index: 0">
+            <div class="destination-card-img">
+              <img src="assets/images/tumpak-sewu.png" alt="Air Terjun Tumpak Sewu">
+            </div>
+            <div class="destination-card-body">
+              <h3>Air Terjun Tumpak Sewu</h3>
+              <p>Air terjun seribu yang spektakuler di Lumajang. Salah satu waterfall terindah di Indonesia.</p>
+            </div>
+          </div>
+
+          <div class="destination-card reveal" style="--child-index: 1">
+            <div class="destination-card-img">
+              <img src="assets/images/ranupani.png" alt="Ranupani">
+            </div>
+            <div class="destination-card-body">
+              <h3>Ranupani</h3>
+              <p>Danau cantik di kaki Semeru dengan udara sejuk dan pemandangan gunung yang memukau.</p>
+            </div>
+          </div>
+
+          <div class="destination-card reveal" style="--child-index: 2">
+            <div class="destination-card-img">
+              <img src="assets/images/mountain-road.png" alt="Jalur Pegunungan">
+            </div>
+            <div class="destination-card-body">
+              <h3>Jalur Pegunungan & Hutan</h3>
+              <p>Riding menyusuri jalan berkelok di antara hutan pinus dan perkebunan teh yang menawan.</p>
             </div>
           </div>
         </div>
-      </a>
-
-      <!-- Destination Cards -->
-      <div class="destination-grid stagger-children">
-        <div class="destination-card reveal" style="--child-index: 0">
-          <div class="destination-card-img">
-            <img src="assets/images/tumpak-sewu.png" alt="Air Terjun Tumpak Sewu">
-            <span class="card-tag">Wajib Mampir</span>
-          </div>
-          <div class="destination-card-body">
-            <h3>Air Terjun Tumpak Sewu</h3>
-            <p>Air terjun seribu yang spektakuler di Lumajang. Salah satu waterfall terindah di Indonesia.</p>
-          </div>
-        </div>
-
-        <div class="destination-card reveal" style="--child-index: 1">
-          <div class="destination-card-img">
-            <img src="assets/images/ranupani.png" alt="Ranupani">
-            <span class="card-tag">Basecamp</span>
-          </div>
-          <div class="destination-card-body">
-            <h3>Ranupani</h3>
-            <p>Danau cantik di kaki Semeru dengan udara sejuk dan pemandangan gunung yang memukau.</p>
-          </div>
-        </div>
-
-        <div class="destination-card reveal" style="--child-index: 2">
-          <div class="destination-card-img">
-            <img src="assets/images/mountain-road.png" alt="Jalur Pegunungan">
-            <span class="card-tag">Petualangan</span>
-          </div>
-          <div class="destination-card-body">
-            <h3>Jalur Pegunungan & Hutan</h3>
-            <p>Riding menyusuri jalan berkelok di antara hutan pinus dan perkebunan teh yang menawan.</p>
-          </div>
-        </div>
       </div>
-    </div>
   </section>
 
   <!-- ==================== PRICING SECTION ==================== -->
@@ -261,91 +288,104 @@
             <line x1="12" y1="1" x2="12" y2="23" />
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
           </svg> Biaya Perjalanan</div>
-        <h2 class="section-title">Biaya Perjalanan</h2>
-        <p class="section-subtitle">Semua sudah termasuk — tanpa biaya tambahan</p>
+        <h2 class="section-title">Biaya Touring First Ride 2026</h2>
+        <p class="section-subtitle">Semua sudah termasuk akomodasi, konsumsi 3x, dokumentasi, merchandise eksklusif,
+          hingga support perjalanan.</p>
       </div>
 
-      <!-- Single Unified Pricing Card -->
+      <!-- Pricing Card -->
       <div class="pricing-unified reveal-scale" id="pricing-card">
-        <div class="pricing-badge">Paket All-In</div>
+        <div class="pricing-badge">All-in Package</div>
 
-        <!-- Pricing Strip: Rider -->
-        <div class="pricing-strip">
-          <div class="pricing-main" id="pricing-rider">
-            <div class="pricing-main-icon">
-              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="7" cy="17" r="3"/><circle cx="17" cy="17" r="3"/>
-                <path d="M10 17h4"/><path d="M5 12l2-5h4l3 5"/>
-                <path d="M14 7l2 5h3a2 2 0 0 1 2 2v3"/>
-              </svg>
+        <!-- Pricing Options -->
+        <div class="pricing-options">
+          <div class="pricing-row rider-card">
+            <div class="option-info">
+              <span class="option-label">Rider</span>
             </div>
-            <div class="pricing-main-label">Rider</div>
-            <div class="pricing-main-price">
+            <div class="option-price">
               <span class="currency">Rp</span>
               <span class="amount">700K</span>
+              <span class="per">/ orang</span>
             </div>
-            <div class="pricing-main-note">Semua sudah termasuk</div>
+          </div>
+
+          <div class="pricing-row boncenger-row">
+            <div class="option-info">
+              <span class="option-label">Boncenger</span>
+            </div>
+            <div class="option-price">
+              <span class="currency">Rp</span>
+              <span class="amount">600K</span>
+              <span class="per">/ orang</span>
+            </div>
           </div>
         </div>
 
-        <div class="pricing-passenger-bar">
-          <div class="passenger-info">
-            <span class="passenger-label">Boncenger / Passenger</span>
-          </div>
-          <div class="passenger-price">
-            <span class="currency">Rp</span>
-            <span class="amount">600K</span>
-            <span class="note"> / orang</span>
-          </div>
-        </div>
-
-        <!-- Separator -->
+        <!-- Separator: Sudah Termasuk -->
         <div class="pricing-separator">
           <span>Sudah Termasuk</span>
         </div>
-        <p class="pricing-included-subtitle">Semua kebutuhan perjalanan Anda sudah kami siapkan</p>
 
-        <!-- Features List Compact -->
+        <!-- Features List -->
         <ul class="features-compact">
           <li>
-            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V8l9-6 9 6v14"/><path d="M9 22V12h6v10"/></svg></div>
-            <div class="feat-text"><strong>Hotel 1 Malam</strong> (Twin Share, nyaman & strategis)</div>
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 22V8l9-6 9 6v14" />
+                <path d="M9 22V12h6v10" />
+              </svg></div>
+            <div class="feat-text"><strong>Hotel 1 Malam</strong>(Twin Share, nyaman &amp; strategis)</div>
           </li>
           <li>
-            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-            <div class="feat-text"><strong>Makan 3x</strong> (Siang, Malam, Pagi)</div>
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                <line x1="6" y1="1" x2="6" y2="4" />
+                <line x1="10" y1="1" x2="10" y2="4" />
+                <line x1="14" y1="1" x2="14" y2="4" />
+              </svg></div>
+            <div class="feat-text"><strong>Makan 3x</strong>(Day 1 Siang, Day 1 Malam, Day 2 Pagi)</div>
           </li>
           <li>
-            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-            <div class="feat-text"><strong>Dokumentasi</strong> (Foto & video profesional)</div>
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg></div>
+            <div class="feat-text"><strong>Dokumentasi</strong>(Foto &amp; video selama perjalanan)</div>
           </li>
           <li>
-            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2 12 5 8 2l-4.38 1.46a2 2 0 0 0-1.34 1.63L1 18l5 3h12l5-3-1.28-12.91a2 2 0 0 0-1.34-1.63z"/><path d="M8 2v7m8-7v7"/></svg></div>
-            <div class="feat-text"><strong>T-Shirt Event</strong> (Eksklusif First Ride 2026)</div>
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M20.38 3.46L16 2 12 5 8 2l-4.38 1.46a2 2 0 0 0-1.34 1.63L1 18l5 3h12l5-3-1.28-12.91a2 2 0 0 0-1.34-1.63z" />
+                <path d="M8 2v7m8-7v7" />
+              </svg></div>
+            <div class="feat-text"><strong>T-Shirt Event</strong>(Eksklusif First Ride 2026)</div>
           </li>
           <li class="feat-full">
-            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4.97 0-9-2.69-9-6 0-2.5 1.5-4.75 3.5-6.5C8.33 8 9 6.17 9 4c0 0 3 2 4 5 .5-1 1-2.5 1-4 3 2.5 5 6 5 9 0 3.31-4.03 6-9 6z"/></svg></div>
-            <div class="feat-text"><strong>Full Support</strong> (Road Captain, Sweeper & Medis)</div>
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M12 22c-4.97 0-9-2.69-9-6 0-2.5 1.5-4.75 3.5-6.5C8.33 8 9 6.17 9 4c0 0 3 2 4 5 .5-1 1-2.5 1-4 3 2.5 5 6 5 9 0 3.31-4.03 6-9 6z" />
+              </svg></div>
+            <div class="feat-text"><strong>Full Support</strong>(Koordinasi Perjalanan)</div>
           </li>
         </ul>
 
-        <!-- Value Statement -->
-        <div class="pricing-value-statement highlight">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
-          <p>200+ KM perjalanan, pengalaman riding yang tak terlupakan — semua sudah kami siapkan untuk Anda.</p>
-        </div>
 
-        <!-- CTA Button -->
+        <!-- CTA -->
         <div class="pricing-cta">
-          <p class="pricing-urgency">Slot terbatas untuk peserta</p>
+          <p class="pricing-deadline">Pendaftaran &amp; pelunasan terakhir: <strong>30 April 2026</strong></p>
           <a href="register.html" class="btn btn-primary btn-large" id="pricing-cta-btn">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="8.5" cy="7" r="4"/>
-              <line x1="20" y1="8" x2="20" y2="14"/>
-              <line x1="23" y1="11" x2="17" y2="11"/>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="8.5" cy="7" r="4" />
+              <line x1="20" y1="8" x2="20" y2="14" />
+              <line x1="23" y1="11" x2="17" y2="11" />
             </svg>
             Daftar Sekarang
           </a>
@@ -420,6 +460,18 @@
           <h3>Healing & Refresh</h3>
           <p>Lepaskan penat dengan healing di alam terbuka bersama rider lainnya.</p>
         </div>
+        <div class="benefit-card reveal" style="--child-index: 5">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+              <path d="M3 6h18" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+          </div>
+          <h3>Merchandise Eksklusif</h3>
+          <p>Dapatkan official T-Shirt dan merchandise eksklusif First Ride 2026 sebagai kenang-kenangan.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -434,128 +486,74 @@
             <circle cx="9" cy="7" r="4" />
             <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-          </svg> Para Rider</div>
-        <h2 class="section-title">Sahabat Aspal</h2>
-        <p class="section-subtitle">Para rider yang siap menaklukkan Jawa Timur bersama.</p>
+          </svg>The Riders First Ride 2026</div>
+        <h2 class="section-title">Daftar rider yang telah terdaftar</h2>
+
       </div>
 
-      <div class="participants-marquee-wrapper" id="participantsMarqueeWrapper">
-        <div class="participants-marquee" id="participantsMarquee">
-          <!-- Set 1 -->
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">JV</div>
-            </div>
-            <div class="participant-name">Joevanz</div>
-            <div class="participant-role">Organizer</div>
+      <div class="participants-grid reveal">
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">JV</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">AR</div>
-            </div>
-            <div class="participant-name">Ardi R.</div>
-            <div class="participant-role">Rider</div>
+          <div class="participant-name">Joevanz</div>
+          <div class="participant-role">Organizer</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">AR</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">DK</div>
-            </div>
-            <div class="participant-name">Deka K.</div>
-            <div class="participant-role">Rider</div>
+          <div class="participant-name">Ardi R.</div>
+          <div class="participant-role">Rider</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">DK</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">BW</div>
-            </div>
-            <div class="participant-name">Bayu W.</div>
-            <div class="participant-role">Rider</div>
+          <div class="participant-name">Deka K.</div>
+          <div class="participant-role">Rider</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">BW</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">FR</div>
-            </div>
-            <div class="participant-name">Fajar R.</div>
-            <div class="participant-role">Rider</div>
+          <div class="participant-name">Bayu W.</div>
+          <div class="participant-role">Rider</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">FR</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">RN</div>
-            </div>
-            <div class="participant-name">Reno N.</div>
-            <div class="participant-role">Rider</div>
+          <div class="participant-name">Fajar R.</div>
+          <div class="participant-role">Rider</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">RN</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">YS</div>
-            </div>
-            <div class="participant-name">Yoga S.</div>
-            <div class="participant-role">Rider</div>
+          <div class="participant-name">Reno N.</div>
+          <div class="participant-role">Rider</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">YS</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">+</div>
-            </div>
-            <div class="participant-name">Kamu?</div>
-            <div class="participant-role">Gas Bareng!</div>
+          <div class="participant-name">Yoga S.</div>
+          <div class="participant-role">Rider</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">DR</div>
           </div>
-
-          <!-- Set 2 -->
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">JV</div>
-            </div>
-            <div class="participant-name">Joevanz</div>
-            <div class="participant-role">Organizer</div>
+          <div class="participant-name">Dani R.</div>
+          <div class="participant-role">Rider</div>
+        </div>
+        <div class="participant-card">
+          <div class="participant-avatar">
+            <div class="initials">+</div>
           </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">AR</div>
-            </div>
-            <div class="participant-name">Ardi R.</div>
-            <div class="participant-role">Rider</div>
-          </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">DK</div>
-            </div>
-            <div class="participant-name">Deka K.</div>
-            <div class="participant-role">Rider</div>
-          </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">BW</div>
-            </div>
-            <div class="participant-name">Bayu W.</div>
-            <div class="participant-role">Rider</div>
-          </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">FR</div>
-            </div>
-            <div class="participant-name">Fajar R.</div>
-            <div class="participant-role">Rider</div>
-          </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">RN</div>
-            </div>
-            <div class="participant-name">Reno N.</div>
-            <div class="participant-role">Rider</div>
-          </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">YS</div>
-            </div>
-            <div class="participant-name">Yoga S.</div>
-            <div class="participant-role">Rider</div>
-          </div>
-          <div class="participant-card">
-            <div class="participant-avatar">
-              <div class="initials">+</div>
-            </div>
-            <div class="participant-name">Kamu?</div>
-            <div class="participant-role">Gas Bareng!</div>
-          </div>
+          <div class="participant-name">Kamu?</div>
+          <div class="participant-role">Gas Bareng!</div>
         </div>
       </div>
     </div>
@@ -661,43 +659,7 @@
     </div>
   </section>
 
-  <!-- ==================== RIDE METHOD ==================== -->
-  <section class="section ride-method" id="ride-method">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-          </svg> Cara Ikutan</div>
-        <h2 class="section-title">Pilih Gaya Ridingmu</h2>
-        <p class="section-subtitle">Pilih metode perjalanan yang paling pas buat kamu.</p>
-      </div>
 
-      <div class="methods-grid">
-        <div class="method-card recommended reveal-left">
-          <div class="method-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
-              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" />
-              <path d="M9 17h6M3 17h2m12 0h4M5.5 11l1.5-4h6l2 4" />
-              <path d="M15.5 11H20a1 1 0 0 1 1 1v3" />
-            </svg></div>
-          <h3>Full Riding</h3>
-          <p>Riding bersama dari Surabaya menuju Pronojiwo. Nikmati setiap kilometer perjalanan dengan komunitas.</p>
-        </div>
-        <div class="method-card reveal-right">
-          <div class="method-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
-              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="1" y="3" width="15" height="13" />
-              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-              <circle cx="5.5" cy="18.5" r="2.5" />
-              <circle cx="18.5" cy="18.5" r="2.5" />
-            </svg></div>
-          <h3>Towing Motor</h3>
-          <p>Motor dikirim (opsional). Kamu bisa menikmati perjalanan tanpa perlu ride jarak jauh.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ==================== MERCHANDISE ==================== -->
   <section class="section merchandise" id="merchandise">
