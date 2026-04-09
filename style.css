@@ -1134,8 +1134,19 @@ h6 {
 }
 
 @keyframes nodeJump {
-  0%, 10% { transform: scale(1); background: var(--color-accent); box-shadow: 0 0 15px rgba(196, 148, 74, 0.4); }
-  5% { transform: scale(1.6); background: #fff; box-shadow: 0 0 25px var(--color-accent); }
+
+  0%,
+  10% {
+    transform: scale(1);
+    background: var(--color-accent);
+    box-shadow: 0 0 15px rgba(196, 148, 74, 0.4);
+  }
+
+  5% {
+    transform: scale(1.6);
+    background: #fff;
+    box-shadow: 0 0 25px var(--color-accent);
+  }
 }
 
 .node-city {
@@ -1173,15 +1184,25 @@ h6 {
 }
 
 @keyframes lineTravel {
-  0% { left: -100%; }
-  10% { left: 100%; }
-  11%, 100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+
+  10% {
+    left: 100%;
+  }
+
+  11%,
+  100% {
+    left: 100%;
+  }
 }
 
 @media (max-width: 992px) {
   .route-node {
     width: 100px;
   }
+
   .node-city {
     font-size: 0.95rem;
   }
@@ -1222,9 +1243,18 @@ h6 {
   }
 
   @keyframes lineTravelVertical {
-    0% { top: -100%; }
-    10% { top: 100%; }
-    11%, 100% { top: 100%; }
+    0% {
+      top: -100%;
+    }
+
+    10% {
+      top: 100%;
+    }
+
+    11%,
+    100% {
+      top: 100%;
+    }
   }
 
   .node-city {
@@ -1509,8 +1539,15 @@ h6 {
 }
 
 @keyframes badgePulse {
-  0%, 100% { box-shadow: 0 4px 16px rgba(196, 148, 74, 0.35); }
-  50% { box-shadow: 0 4px 24px rgba(196, 148, 74, 0.55); }
+
+  0%,
+  100% {
+    box-shadow: 0 4px 16px rgba(196, 148, 74, 0.35);
+  }
+
+  50% {
+    box-shadow: 0 4px 24px rgba(196, 148, 74, 0.55);
+  }
 }
 
 /* ---------- Pricing Options ---------- */
@@ -2691,35 +2728,79 @@ h6 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  text-align: center;
+}
+
+.footer-branding {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 48px;
 }
 
 .footer-logo {
-  display: flex;
-  align-items: center;
+  flex-shrink: 0;
 }
 
 .footer-logo img {
-  height: clamp(36px, 5vw, 48px);
+  height: clamp(40px, 5vw, 48px);
   width: auto;
-  opacity: 0.9;
+  opacity: 1;
 }
 
-.footer-text {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-}
 
-.footer-divider {
-  width: 40px;
-  height: 1px;
+
+.footer-divider-v {
+  width: 1px;
+  height: 48px;
   background: var(--color-border);
+  opacity: 0.6;
 }
+
+.footer-sponsor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 5px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-base);
+}
+
+.footer-sponsor:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.footer-sponsor img {
+  height: 36px;
+  width: auto;
+  opacity: 1;
+  transition: all var(--transition-base);
+}
+
+
+
+
+.footer-sponsor img:hover {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+
 
 .footer-copy {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--color-text-muted);
+  opacity: 0.4;
+  letter-spacing: 0.5px;
 }
+
+
 
 /* ==========================================
    FLOATING WHATSAPP BUTTON
@@ -2777,7 +2858,8 @@ h6 {
 
 @media (max-width: 768px) {
   .whatsapp-float {
-    bottom: 85px; /* Avoid important content overlap */
+    bottom: 85px;
+    /* Avoid important content overlap */
     right: 20px;
     width: 52px;
     height: 52px;
@@ -3956,7 +4038,46 @@ h6 {
     line-height: 1.5;
   }
 
+  /* ---------- FOOTER MOBILE ---------- */
+  .footer {
+    padding: 60px 0;
+  }
+
+  .footer-branding {
+    flex-direction: row;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding: 0 16px;
+  }
+
+  .footer-logo img {
+    height: 32px;
+  }
+
+  .footer-divider-v {
+    height: 30px;
+    opacity: 0.3;
+  }
+
+  .footer-sponsor {
+    padding: 8px 14px;
+  }
+
+  .footer-sponsor img {
+    height: 26px;
+  }
+
+
+  .footer-copy {
+    padding: 0 24px;
+    line-height: 1.6;
+    font-size: 0.65rem;
+  }
 }
+
+
+
+
 
 img,
 svg,
