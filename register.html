@@ -10,9 +10,11 @@
   <meta name="theme-color" content="#0F0D0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/images/logore.png">
+  <link rel="apple-touch-icon" href="assets/images/logore.png">
 </head>
 
 <body>
@@ -25,6 +27,8 @@
     <div class="container">
       <a href="index.html" class="nav-logo">
         <img src="assets/images/firstride.png" alt="First Ride 2026 Logo">
+        <div class="nav-logo-divider"></div>
+        <img src="assets/images/royal.png" alt="Royal Logo" class="secondary-logo">
       </a>
       <div class="nav-links" id="navLinks">
         <a href="index.html#about">Tentang</a>
@@ -83,8 +87,8 @@
               </svg>
               Nama <span class="required">*</span>
             </label>
-            <input type="text" id="regName" name="name" class="form-input" placeholder="Masukkan nama lengkap"
-              required autocomplete="name">
+            <input type="text" id="regName" name="name" class="form-input" placeholder="Masukkan nama lengkap" required
+              autocomplete="name">
             <div class="form-error" id="nameError">Nama wajib diisi</div>
           </div>
 
@@ -198,9 +202,11 @@
           <div class="footer-logo">
             <img src="assets/images/firstride.png" alt="First Ride 2026 Logo">
           </div>
-          <div class="footer-divider-v"></div>
-          <div class="footer-sponsor">
-            <img src="assets/images/sitezet.png" alt="Sitezet Logo">
+          <div class="footer-credit">
+            <div class="credit-label">Website by</div>
+            <a href="https://sitezet.com" target="_blank" class="sitezet-brand">
+              <span class="site">site</span><span class="zet">zet</span>
+            </a>
           </div>
         </div>
         <div class="footer-copy">© 2026 First Ride. All Rights Reserved.</div>
