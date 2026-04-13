@@ -1,14 +1,59 @@
 /* ============================================
-   FIRST RIDE 2026 – Registration Page JS
+   FIRST RIDE 2026 – Registration Page JS (PRO)
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ==========================================
-  // MOBILE NAVIGATION
-  // ==========================================
+  // Constants
+  const PRICE_PER_PAX = 775000;
+  const MAX_PAX = 4;
+
+  // State
+  let currentPax = 1;
+  let photoDataURL = null;
+
+  // Elements
+  const paxMinus = document.getElementById('paxMinus');
+  const paxPlus = document.getElementById('paxPlus');
+  const paxDisplay = document.getElementById('paxDisplay');
+  const paxInput = document.getElementById('regPax');
+  const additionalParticipantsContainer = document.getElementById('additionalParticipants');
+  const totalAmountEl = document.getElementById('totalAmount');
+  const totalCostContainer = document.querySelector('.total-cost-container');
+
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
 
+  const photoInput = document.getElementById('regPhoto');
+  const uploadArea = document.getElementById('photoUploadArea');
+  const placeholder = document.getElementById('uploadPlaceholder');
+  const previewContainer = document.getElementById('uploadPreview');
+  const previewImage = document.getElementById('previewImage');
+  const removeBtn = document.getElementById('removePhoto');
+
+  const form = document.getElementById('registerForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const submitText = document.getElementById('submitText');
+
+  // ==========================================
+  // HELPERS
+  // ==========================================
+
+  /**
+   * Formats 775000 into "775" (for Rp ...K format)
+   * or handles 1550000 into "1.550"
+   */
+  function formatK(amount) {
+    const kValue = amount / 1000;
+    return kValue.toLocaleString('id-ID');
+  }
+
+  function normalizePhone(phone) {
+    return phone.replace(/\D/g, '');
+  }
+
+  // ==========================================
+  // MOBILE NAVIGATION
+  // ==========================================
   if (navToggle && navLinks) {
     navToggle.addEventListener('click', () => {
       navToggle.classList.toggle('active');
@@ -26,16 +71,96 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
+  // PAX & PRICING LOGIC
+  // ==========================================
+
+  function updatePax(newPax) {
+    if (newPax < 1 || newPax > MAX_PAX) return;
+
+    // Update state
+    const oldPax = currentPax;
+    currentPax = newPax;
+
+    // Update UI
+    paxDisplay.textContent = currentPax;
+    paxInput.value = currentPax;
+    paxMinus.disabled = currentPax === 1;
+    paxPlus.disabled = currentPax === MAX_PAX;
+
+    // Update Price
+    const totalCost = currentPax * PRICE_PER_PAX;
+    totalAmountEl.textContent = formatK(totalCost);
+
+    // Smooth pulse effect on price change
+    totalCostContainer.classList.add('updating');
+    setTimeout(() => totalCostContainer.classList.remove('updating'), 300);
+
+    // Dynamic Fields Handling
+    if (currentPax > oldPax) {
+      // Add more fields
+      for (let i = oldPax + 1; i <= currentPax; i++) {
+        addParticipantField(i);
+      }
+    } else if (currentPax < oldPax) {
+      // Remove extra fields
+      for (let i = oldPax; i > currentPax; i--) {
+        removeParticipantField(i);
+      }
+    }
+  }
+
+  function addParticipantField(index) {
+    const fieldSet = document.createElement('div');
+    fieldSet.className = 'form-group participant-field';
+    fieldSet.id = `participantField_${index}`;
+    fieldSet.innerHTML = `
+      <label class="form-label">Nama Peserta ${index}</label>
+      <input type="text" name="additional_name" class="form-input additional-name-input" 
+             placeholder="Masukkan nama peserta ${index}" required>
+      <div class="form-error">Nama peserta ${index} wajib diisi</div>
+    `;
+
+    additionalParticipantsContainer.appendChild(fieldSet);
+
+    // Reveal animation delay
+    requestAnimationFrame(() => {
+      fieldSet.classList.add('visible');
+    });
+
+    // Auto scroll to new field
+    fieldSet.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Add listener to new input
+    const input = fieldSet.querySelector('input');
+    input.addEventListener('focus', () => {
+      input.closest('.form-group').classList.add('focused');
+    });
+    input.addEventListener('blur', () => {
+      input.closest('.form-group').classList.remove('focused');
+    });
+    input.addEventListener('input', () => {
+      input.closest('.form-group').classList.remove('error');
+    });
+  }
+
+  function removeParticipantField(index) {
+    const field = document.getElementById(`participantField_${index}`);
+    if (field) {
+      field.style.opacity = '0';
+      field.style.transform = 'translateY(-10px)';
+      setTimeout(() => field.remove(), 400);
+    }
+  }
+
+  paxMinus.addEventListener('click', () => updatePax(currentPax - 1));
+  paxPlus.addEventListener('click', () => updatePax(currentPax + 1));
+
+  // Initialize
+  updatePax(1);
+
+  // ==========================================
   // PHOTO UPLOAD & PREVIEW
   // ==========================================
-  const photoInput = document.getElementById('regPhoto');
-  const uploadArea = document.getElementById('photoUploadArea');
-  const placeholder = document.getElementById('uploadPlaceholder');
-  const previewContainer = document.getElementById('uploadPreview');
-  const previewImage = document.getElementById('previewImage');
-  const removeBtn = document.getElementById('removePhoto');
-
-  let photoDataURL = null;
 
   // Click to upload
   uploadArea.addEventListener('click', (e) => {
@@ -49,9 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadArea.classList.add('drag-over');
   });
 
-  uploadArea.addEventListener('dragleave', () => {
-    uploadArea.classList.remove('drag-over');
-  });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
 
   uploadArea.addEventListener('drop', (e) => {
     e.preventDefault();
@@ -69,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function handleFile(file) {
-    // Validate size (5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert('Ukuran file maksimal 5MB');
       return;
@@ -77,14 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      // Resize image to prevent localStorage quota issues
-      resizeImage(e.target.result, 600, (resizedDataURL) => {
+      resizeImage(e.target.result, 800, (resizedDataURL) => {
         photoDataURL = resizedDataURL;
         previewImage.src = resizedDataURL;
         placeholder.style.display = 'none';
         previewContainer.style.display = 'flex';
         uploadArea.classList.add('has-preview');
-        // Clear error state
         uploadArea.closest('.form-group').classList.remove('error');
       });
     };
@@ -94,23 +214,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function resizeImage(dataURL, maxSize, callback) {
     const img = new Image();
     img.onload = () => {
-      let w = img.width;
-      let h = img.height;
+      let w = img.width, h = img.height;
       if (w > maxSize || h > maxSize) {
-        if (w > h) {
-          h = Math.round((h * maxSize) / w);
-          w = maxSize;
-        } else {
-          w = Math.round((w * maxSize) / h);
-          h = maxSize;
-        }
+        if (w > h) { h = Math.round((h * maxSize) / w); w = maxSize; }
+        else { w = Math.round((w * maxSize) / h); h = maxSize; }
       }
       const canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
+      canvas.width = w; canvas.height = h;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, w, h);
-      callback(canvas.toDataURL('image/jpeg', 0.7));
+      callback(canvas.toDataURL('image/jpeg', 0.8));
     };
     img.src = dataURL;
   }
@@ -128,51 +241,54 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // FORM VALIDATION & SUBMISSION
   // ==========================================
-  const form = document.getElementById('registerForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const submitText = document.getElementById('submitText');
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Clear previous errors
+    // 1. Validation
     document.querySelectorAll('.form-group').forEach(g => g.classList.remove('error'));
 
-    const name = document.getElementById('regName').value.trim();
-    const phone = document.getElementById('regPhone').value.trim();
+    const mainName = document.getElementById('regName').value.trim();
+    const phoneRaw = document.getElementById('regPhone').value.trim();
+    const phone = normalizePhone(phoneRaw);
+
+    const additionalNames = Array.from(document.querySelectorAll('.additional-name-input'))
+      .map(input => input.value.trim())
+      .filter(name => name !== '');
+
     let hasError = false;
 
-    // Validate name
-    if (!name) {
+    if (!mainName) {
       document.getElementById('regName').closest('.form-group').classList.add('error');
       hasError = true;
     }
 
-    // Validate phone
-    if (!phone) {
+    if (!phone || phone.length < 9) {
       document.getElementById('regPhone').closest('.form-group').classList.add('error');
       hasError = true;
     }
 
-    // Validate photo
+    // Check additional names visibility & count
+    const visibleAdditionalInputs = document.querySelectorAll('.additional-name-input');
+    visibleAdditionalInputs.forEach(input => {
+      if (!input.value.trim()) {
+        input.closest('.form-group').classList.add('error');
+        hasError = true;
+      }
+    });
+
     if (!photoDataURL) {
       document.getElementById('regPhoto').closest('.form-group').classList.add('error');
       hasError = true;
     }
 
     if (hasError) {
-      // Scroll to first error
       const firstError = document.querySelector('.form-group.error');
-      if (firstError) {
-        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
-    // ==========================================
-    // SUPABASE CONFIGURATION
-    // ==========================================
-    // Silakan ganti [YOUR_ANON_KEY] dengan key yang Anda dapatkan dari Settings > API
+    // 2. Database Integration
     const SUPABASE_URL = 'https://uctaqoxtbubkmqvyltmi.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjdGFxb3h0YnVia21xdnlsdG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYxMjAsImV4cCI6MjA5MTIzMjEyMH0.mTnYlg_Rfu0ZXNdXycXuTTr6VpJTG2WZQy7rPwuIDls';
 
@@ -180,122 +296,144 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     } catch (err) {
-      console.error('Supabase initialization failed:', err);
+      console.error('Supabase init failed', err);
     }
 
-    // Show loading state
+    // Loading state
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
-    submitText.textContent = 'Processing...';
+    submitText.textContent = 'Memproses...';
 
     async function handleRegistration() {
       try {
-        if (!supabase) throw new Error('Database connection not ready');
+        if (!supabase) throw new Error('Database connection failed');
 
-        // 1. Convert resized photo (base64) to Blob for upload
+        // UPLOAD PHOTO
         const response = await fetch(photoDataURL);
         const blob = await response.blob();
+        const fileName = `ride2026_${Date.now()}_${Math.random().toString(36).substr(2, 5)}.jpg`;
 
-        // 2. Upload to Supabase Storage (Bucket: photo)
-        const fileName = `ride2026_${Date.now()}.jpg`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('photo')
-          .upload(fileName, blob, {
-            contentType: 'image/jpeg'
-          });
+          .upload(fileName, blob, { contentType: 'image/jpeg' });
 
         if (uploadError) throw uploadError;
 
-        // 3. Get Public URL for the uploaded photo
         const { data: { publicUrl } } = supabase.storage
           .from('photo')
           .getPublicUrl(fileName);
 
-        // 4. Save Participant data to Database (Table: participants)
+        // SAVE DATA
+        const totalBiaya = currentPax * PRICE_PER_PAX;
         const { error: dbError } = await supabase
           .from('participants')
           .insert([
             {
-              name: name,
+              name: mainName,
               phone: phone,
-              photo_url: publicUrl
+              photo_url: publicUrl,
+              jumlah_pax: currentPax,
+              additional_participants: additionalNames,
+              total_biaya: totalBiaya
             }
           ]);
 
         if (dbError) throw dbError;
 
-        // Success!
-        showSuccess(name);
+        // Success Flow
+        showSuccess(mainName, currentPax, additionalNames, totalBiaya);
 
       } catch (err) {
         console.error('Registration error:', err);
-        alert('Gagal mendaftar: ' + (err.message || 'Terjadi kesalahan pada server'));
+        alert('Gagal mendaftar: ' + (err.message || 'Terjadi kesalahan pada server. Coba lagi.'));
 
-        // Reset button state
+        // Reset button
         submitBtn.disabled = false;
         submitBtn.classList.remove('loading');
         submitText.textContent = 'Register Now';
       }
     }
 
-    // Execute the async registration
     handleRegistration();
-
   });
 
   // ==========================================
-  // SUCCESS MODAL & WHATSAPP REDIRECT
+  // SUCCESS & WHATSAPP REDIRECT
   // ==========================================
-  function showSuccess(name) {
+
+  function showSuccess(mainName, pax, others, total) {
     const overlay = document.getElementById('successOverlay');
     const countdownEl = document.getElementById('countdown');
 
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 
+    // WA Message Construction
+    let detailList = `1. ${mainName}`;
+    others.forEach((name, idx) => {
+      detailList += `\n${idx + 2}. ${name}`;
+    });
+
+    const message = `_Mohon kirim pesan ini tanpa mengedit teks._
+
+━━━━━━━━
+*PENDAFTARAN FIRST RIDE 2026*
+━━━━━━━━
+
+*Nama:*
+${mainName}
+
+*Jumlah Peserta:*
+${pax} Pax
+
+━━━━━━━━
+*Detail Peserta:*
+━━━━━━━━
+${detailList}
+
+━━━━━━━━
+*Total Biaya:*
+━━━━━━━━
+*Rp ${formatK(total)}K*
+━━━━━━━━
+
+Mohon info pembayaran selanjutnya. Terima kasih.
+
+
+_Pesan ini dibuat otomatis oleh sistem._`;
+
+    const waURL = `https://wa.me/6282132579131?text=${encodeURIComponent(message)}`;
+
     let seconds = 3;
     countdownEl.textContent = seconds;
 
     const timer = setInterval(() => {
       seconds--;
-      countdownEl.textContent = seconds;
+      if (seconds >= 0) countdownEl.textContent = seconds;
+
       if (seconds <= 0) {
         clearInterval(timer);
-        // Redirect to WhatsApp
-        const waURL = `https://wa.me/6282132579131?text=Halo%20saya%20sudah%20daftar%20First%20Ride%202026%0ANama:%20${encodeURIComponent(name)}`;
-        window.location.href = waURL;
+        setTimeout(() => {
+          window.location.href = waURL;
+        }, 600); // 600ms final delay for smoothness
       }
     }, 1000);
   }
 
   // ==========================================
-  // ENTRANCE ANIMATION
+  // UX: ENTRANCE & FOCUS
   // ==========================================
   const card = document.querySelector('.register-card');
   const backBtn = document.querySelector('.register-back');
 
-  setTimeout(() => {
-    if (backBtn) backBtn.classList.add('visible');
-  }, 200);
+  setTimeout(() => { if (backBtn) backBtn.classList.add('visible'); }, 200);
+  setTimeout(() => { if (card) card.classList.add('visible'); }, 400);
 
-  setTimeout(() => {
-    if (card) card.classList.add('visible');
-  }, 400);
-
-  // ==========================================
-  // INPUT FOCUS EFFECTS
-  // ==========================================
   document.querySelectorAll('.form-input').forEach(input => {
-    input.addEventListener('focus', () => {
-      input.closest('.form-group').classList.add('focused');
-    });
-    input.addEventListener('blur', () => {
-      input.closest('.form-group').classList.remove('focused');
-    });
-    // Clear error on input
-    input.addEventListener('input', () => {
-      input.closest('.form-group').classList.remove('error');
-    });
+    const g = input.closest('.form-group');
+    if (!g) return;
+    input.addEventListener('focus', () => g.classList.add('focused'));
+    input.addEventListener('blur', () => g.classList.remove('focused'));
+    input.addEventListener('input', () => g.classList.remove('error'));
   });
-
 });

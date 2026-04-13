@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // SCROLL REVEAL ANIMATIONS
   // ==========================================
-  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-pricing');
 
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 2. Update Count
       const totalCount = participants.length;
-      countEl.textContent = `${totalCount} Rider Telah Terdaftar`;
+      countEl.textContent = totalCount;
 
       // 3. Clear existing example data except Joevanz (if he's the admin)
       // Or just clear all and we rebuild it
@@ -313,7 +313,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ==========================================
+  // PRICE COUNT-UP ANIMATION
+  // ==========================================
+  const priceAmount = document.getElementById('price-amount');
+  if (priceAmount) {
+    const targetPrice = parseInt(priceAmount.getAttribute('data-target'));
+    const priceObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Small delay to sync with reveal animation
+          setTimeout(() => {
+            let current = 0;
+            const duration = 2000; // 2 seconds
+            const startTime = performance.now();
+
+            function updatePrice(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              
+              // Ease out quadratic
+              const easeProgress = 1 - (1 - progress) * (1 - progress);
+              current = Math.floor(easeProgress * targetPrice);
+              
+              priceAmount.textContent = current + 'K';
+
+              if (progress < 1) {
+                requestAnimationFrame(updatePrice);
+              } else {
+                priceAmount.textContent = targetPrice + 'K';
+                priceAmount.classList.add('glow');
+              }
+            }
+
+            requestAnimationFrame(updatePrice);
+          }, 400);
+          
+          priceObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    priceObserver.observe(priceAmount);
+  }
+
   loadRegisteredParticipants();
 
 });
+
+// ==========================================
+// ACCORDION LOGIC (Global)
+// ==========================================
+function toggleAccordion(element) {
+  const parent = element.parentElement;
+  parent.classList.toggle('expanded');
+}
 

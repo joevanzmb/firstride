@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Jadwal — FIRST RIDE 2026</title>
+  <meta name="description"
+    content="Detail Jadwal Acara First Ride 2026 – Royal Enfield East Java Expedition. Itinerary lengkap perjalanan touring motor premium dari Surabaya ke kaki Gunung Semeru.">
+  <meta name="theme-color" content="#0F0D0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/images/logore.png">
+  <link rel="apple-touch-icon" href="assets/images/logore.png">
+  <style>
+    /* Spacing fixes specifically for the detail page */
+    .schedule-page {
+      padding: 120px 0 80px;
+      min-height: 100vh;
+      background: var(--color-bg);
+      position: relative;
+    }
+
+    .schedule-header {
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .schedule-header .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .schedule-header .section-subtitle {
+      margin: 0 auto;
+    }
+
+    .rundown-days.detail {
+      grid-template-columns: 1fr;
+      /* Stack them for a full detailed view, or 1fr 1fr if side-by-side */
+      gap: 40px;
+    }
+
+    @media (min-width: 900px) {
+      .rundown-days.detail {
+        grid-template-columns: 1fr 1fr;
+        /* Side by side on larger screens */
+      }
+    }
+
+    .rundown-day.detail-card {
+      background: var(--color-bg-elevated);
+      overflow: hidden;
+    }
+
+    /* Accordion Styles */
+    .accordion-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition-base);
+    }
+
+    .accordion-btn:hover {
+      background: rgba(196, 148, 74, 0.05);
+    }
+
+    .accordion-icon {
+      color: var(--color-accent);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .rundown-day.active .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .timeline-accordion-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0 32px;
+    }
+
+    .rundown-day.active .timeline-accordion-content {
+      max-height: 3000px;
+      opacity: 1;
+      padding: 16px 32px 32px;
+    }
+
+    @media (max-width: 768px) {
+      .schedule-page {
+        padding: 120px 0 60px;
+      }
+
+      .timeline-accordion-content {
+        padding: 0 20px;
+      }
+
+      .rundown-day.active .timeline-accordion-content {
+        padding: 16px 20px 24px;
+      }
+
+      .register-back {
+        font-size: 1rem;
+        margin-bottom: 30px;
+      }
+
+      .schedule-header .section-title {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .schedule-page {
+        padding: 100px 0 50px;
+      }
+
+      .register-back {
+        font-size: 0.95rem;
+        margin-bottom: 24px;
+        gap: 8px;
+      }
+
+      .schedule-header {
+        margin-bottom: 32px;
+      }
+
+      .schedule-header .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+      }
+
+      .schedule-header .section-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .accordion-btn {
+        padding: 16px 20px;
+      }
+
+      .day-title {
+        font-size: 1.2rem;
+      }
+
+      .timeline-accordion-content {
+        padding: 0 16px;
+      }
+
+      .rundown-day.active .timeline-accordion-content {
+        padding: 12px 16px 20px;
+      }
+
+      .timeline-item {
+        gap: 12px;
+        padding-bottom: 20px;
+      }
+
+      .timeline-time {
+        min-width: 48px;
+        font-size: 0.75rem;
+      }
+
+      .timeline-title {
+        font-size: 0.9rem;
+      }
+
+      .timeline-details {
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
+      .timeline-details ul {
+        padding-left: 1rem;
+        margin-top: 6px;
+      }
+
+      /* Image styling in timeline */
+      .timeline-photo {
+        margin-top: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        max-width: 100%;
+        position: relative;
+        /* Added for absolute positioning of children */
+      }
+
+      .timeline-photo img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .timeline-photo:hover img {
+        transform: scale(1.05);
+      }
+
+      .map-link-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        background: rgba(15, 13, 10, 0.75);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 6px;
+        color: var(--color-accent);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all var(--transition-base);
+        z-index: 10;
+      }
+
+      .map-link-btn:hover {
+        background: var(--color-accent);
+        color: #000;
+        transform: scale(1.05);
+      }
+
+      /* Map Link Card */
+      .map-link-card.simple {
+        display: block;
+        position: relative;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 15px;
+        text-decoration: none;
+        transition: all var(--transition-base);
+      }
+
+      .map-link-card.simple:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--color-accent);
+        transform: translateY(-2px);
+      }
+
+      .map-card-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.2;
+      }
+
+      .map-card-tag.highlighted {
+        position: absolute;
+        bottom: 10px;
+        right: 12px;
+        font-size: 0.7rem;
+        color: #000;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 800;
+        background: var(--color-accent);
+        padding: 4px 10px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(196, 148, 74, 0.3);
+      }
+
+      .map-link-card.simple:hover .map-card-tag.highlighted {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+      }
+
+      /* Map styling */
+      .map-wrapper {
+        margin-top: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        padding-top: 56.25%;
+        /* 16:9 Aspect Ratio */
+        background: var(--color-bg-elevated);
+      }
+
+      .map-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay"></div>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/firstride.png" alt="First Ride 2026 Logo">
+        <div class="nav-logo-divider"></div>
+        <img src="assets/images/royal.png" alt="Royal Logo" class="secondary-logo">
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#about">Tentang</a>
+        <a href="index.html#route">Rute</a>
+        <a href="index.html#pricing">Paket</a>
+        <a href="index.html#rundown">Jadwal</a>
+        <a href="galeri.html">Galeri</a>
+        <a href="register.html" class="nav-cta">Pendaftaran</a>
+      </div>
+      <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== DETAILED SCHEDULE ==================== -->
+  <section class="schedule-page" id="schedulePage">
+    <div class="container">
+
+      <!-- Back Button -->
+      <a href="index.html" class="register-back visible" id="backBtn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Kembali
+      </a>
+
+      <!-- Page Header -->
+      <div class="schedule-header reveal">
+        <h1 class="section-title">Itinerary First Ride 2026</h1>
+        <p class="section-subtitle">Detail Susunan acara lengkap dan rinci</p>
+      </div>
+
+      <!-- Schedule Content -->
+      <div class="rundown-days detail reveal">
+        <!-- Day 1 -->
+        <div class="rundown-day detail-card">
+          <div class="day-header accordion-btn" onclick="toggleAccordion(this)">
+            <div>
+              <div class="day-label">Hari Pertama</div>
+              <h3 class="day-title">Sabtu, 09 Mei 2026</h3>
+            </div>
+            <svg class="accordion-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="timeline timeline-accordion-content">
+
+            <div class="timeline-item">
+              <div class="timeline-time">06.00</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Titik Kumpul & Briefing</div>
+                <a href="https://maps.app.goo.gl/2K7Ppm1KD5eXeR4H6" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Puri Surya Jaya, Gedangan</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Maps
+                  </div>
+                </a>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/tikum.png" alt="Titik Kumpul Puri Surya Jaya">
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">06.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">RIDE 1: Start Perjalanan</div>
+                <div class="timeline-details">
+                  Perjalanan menuju Tumpang (estimasi 2,5 - 3 jam).
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">09.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Coffee Break</div>
+                <a href="https://maps.app.goo.gl/2AM2nne93HycWU6N8" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Pondok Tubing Cafe, Tumpang</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    Maps
+                  </div>
+                </a>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/pondoktubing.png" alt="Coffee Break Tumpang">
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">10.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">RIDE 2: Menuju Ranupani</div>
+                <div class="timeline-details">
+                  Perjalanan dari Tumpang menuju Ranupani (estimasi 1 jam). Melewati jalur perbukitan yang asri.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">11.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Pitstop Ranupani</div>
+                <div class="timeline-details">
+                  📍 Danau Ranupani. ISHOMA (Istirahat, Sholat, Makan Siang) dengan latar danau yang tenang.
+                </div>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/ranupani.png" alt="Ranupani Lake">
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">13.15</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">RIDE 3: Menuju Senduro</div>
+                <div class="timeline-details">
+                  Perjalanan dari Ranupani menuju Senduro (estimasi 1 jam). Turunan dan kelokan yang menantang.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">14.15</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Pitstop Senduro</div>
+                <div class="timeline-details">
+                  📍 Siti Sundari, Senduro. Berhenti sejenak untuk menikmati pemandangan hutan pinus.
+                </div>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/senduro.png" alt="Hutan Pinus Siti Sundari">
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">14.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">RIDE 4: Menuju Pronojiwo</div>
+                <div class="timeline-details">
+                  Melanjutkan perjalanan ke Pronojiwo (estimasi 1 jam).
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">15.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Tiba di Lokasi Acara</div>
+                <div class="timeline-details">
+                  📍 Kali Kebo Camping Ground, Pronojiwo. Eksplorasi area dan dokumentasi di lokasi utama.
+                </div>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/kalikebo.png" alt="Kali Kebo View">
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">16.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">RIDE 5: Ke Penginapan</div>
+                <div class="timeline-details">
+                  Perjalanan singkat menuju penginapan (estimasi 15 menit).
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">16.45</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Check-in Penginapan</div>
+                <div class="timeline-details">
+                  📍 Artha Cottages, Pronojiwo. Istirahat sejenak dan rapih-rapih setelah perjalanan jauh.
+                </div>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/artha.png" alt="Artha Cottages Pronojiwo">
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">19.00</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Makan Malam & Free Time</div>
+                <div class="timeline-details">
+                  Makan malam bersama di penginapan dan waktu bebas untuk istirahat.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="rundown-day detail-card">
+          <div class="day-header accordion-btn" onclick="toggleAccordion(this)">
+            <div>
+              <div class="day-label">Hari Kedua</div>
+              <h3 class="day-title">Minggu, 10 Mei 2026</h3>
+            </div>
+            <svg class="accordion-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="timeline timeline-accordion-content">
+
+            <div class="timeline-item">
+              <div class="timeline-time">06.00</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Morning Ride & Sesi Fotografi</div>
+                <div class="timeline-details">
+                  Eksplorasi spot foto indah di kaki Gunung Semeru dengan motor Royal Enfield kesayangan. Ini wajib
+                  untuk koleksi foto terbaik Anda.
+                  <ul>
+                    <li>Lokasi: Area Jembatan Gladak Perak / Piket Nol</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">08.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Sarapan Bersama</div>
+                <div class="timeline-details">
+                  Kembali ke penginapan untuk sarapan pagi dan ngopi santai.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">09.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Persiapan Pulang (Packing)</div>
+                <div class="timeline-details">
+                  Merapikan barang bawaan dan persiapan check-out dari penginapan.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">10.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Briefing Rute Pulang</div>
+                <div class="timeline-details">
+                  Arahan dari Road Captain mengenai rute kepulangan yang akan dilalui.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">11.00</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Perjalanan Pulang Dimulai</div>
+                <div class="timeline-details">
+                  Konvoi bergerak kembali menuju Surabaya.
+                  <ul>
+                    <li>Rute Utama: Lumajang - Probolinggo - Pasuruan - Sidoarjo</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">13.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Istirahat & Makan Siang</div>
+                <div class="timeline-details">
+                  Rehat makan siang di jalur kepulangan, sekaligus perpisahan secara informal sebelum kembali ke rumah
+                  masing-masing.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">16.30</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">Tiba di Surabaya (Acara Selesai)</div>
+                <div class="timeline-details">
+                  Konvoi sampai di titik akhir. Peserta kembali dengan kenangan tak terlupakan.
+                  <ul>
+                    <li>Estimasi tiba di titik kumpul awal / Sidoarjo.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-branding">
+          <div class="footer-logo">
+            <img src="assets/images/firstride.png" alt="First Ride 2026 Logo">
+          </div>
+          <div class="footer-credit">
+            <div class="credit-label">Website by</div>
+            <a href="https://sitezet.com" target="_blank" class="sitezet-brand">
+              <span class="site">site</span><span class="zet">zet</span>
+            </a>
+          </div>
+        </div>
+        <div class="footer-copy">© 2026 First Ride. All Rights Reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // Simple navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    // Reveal animations
+    const revealElements = document.querySelectorAll('.reveal, .reveal-left');
+    const exposeElements = () => {
+      revealElements.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+        const elementVisible = 100;
+        if (elementTop < windowHeight - elementVisible) {
+          el.classList.add('active');
+        }
+      });
+    };
+    window.addEventListener('scroll', exposeElements);
+    exposeElements(); // Trigger once on load
+
+    // Accordion Logic
+    function toggleAccordion(element) {
+      const parent = element.parentElement;
+      parent.classList.toggle('active');
+    }
+  </script>
+</body>
+
+</html>

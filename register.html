@@ -10,7 +10,8 @@
   <meta name="theme-color" content="#0F0D0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="assets/images/logore.png">
@@ -77,6 +78,35 @@
 
         <!-- The Form -->
         <form id="registerForm" class="register-form" novalidate>
+          <!-- Pax Stepper -->
+          <div class="form-group">
+            <label class="form-label">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              Jumlah Peserta (Pax)
+            </label>
+            <div class="pax-stepper">
+              <button type="button" class="stepper-btn" id="paxMinus" aria-label="Kurangi Peserta">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </button>
+              <div class="pax-value" id="paxDisplay">1</div>
+              <button type="button" class="stepper-btn" id="paxPlus" aria-label="Tambah Peserta">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </button>
+              <input type="hidden" id="regPax" name="pax" value="1">
+            </div>
+          </div>
+
           <!-- Name Field -->
           <div class="form-group">
             <label for="regName" class="form-label">
@@ -91,6 +121,9 @@
               autocomplete="name">
             <div class="form-error" id="nameError">Nama wajib diisi</div>
           </div>
+
+          <!-- Additional Participants Container -->
+          <div id="additionalParticipants" class="additional-participants-container"></div>
 
           <!-- WhatsApp Number -->
           <div class="form-group">
@@ -159,6 +192,13 @@
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
             Nomor WhatsApp hanya digunakan untuk keperluan admin dan tidak ditampilkan.
+          </div>
+
+          <!-- Total Biaya -->
+          <div class="total-cost-container">
+            <div class="total-cost-label">Total Biaya</div>
+            <div class="total-cost-amount">Rp <span id="totalAmount">775</span>K</div>
+            <div class="total-cost-note">*Rp 775K per pax</div>
           </div>
 
           <!-- Submit Button -->
