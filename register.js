@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = document.getElementById('submitBtn');
   const submitText = document.getElementById('submitText');
 
+  // Size Modal Elements
+  const openSizeChartBtn = document.getElementById('openSizeChart');
+  const closeSizeChartBtn = document.getElementById('closeSizeChart');
+  const sizeModal = document.getElementById('sizeChartModal');
+
   // ==========================================
   // HELPERS
   // ==========================================
@@ -67,6 +72,36 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.classList.remove('active');
         document.body.style.overflow = '';
       });
+    });
+  }
+
+  // ==========================================
+  // SIZE CHART MODAL LOGIC
+  // ==========================================
+  function toggleSizeModal(show) {
+    if (show) {
+      sizeModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    } else {
+      sizeModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (openSizeChartBtn && closeSizeChartBtn && sizeModal) {
+    openSizeChartBtn.addEventListener('click', () => toggleSizeModal(true));
+    closeSizeChartBtn.addEventListener('click', () => toggleSizeModal(false));
+
+    // Close on overlay click
+    sizeModal.addEventListener('click', (e) => {
+      if (e.target === sizeModal) toggleSizeModal(false);
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sizeModal.classList.contains('active')) {
+        toggleSizeModal(false);
+      }
     });
   }
 
@@ -118,6 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
       <input type="text" name="additional_name" class="form-input additional-name-input" 
              placeholder="Masukkan nama peserta ${index}" required>
       <div class="form-error">Nama peserta ${index} wajib diisi</div>
+      
+      <div class="additional-size-field">
+        <select name="additional_size" class="form-input form-select additional-size-input" required>
+          <option value="" disabled selected>Pilih Ukuran Jersey</option>
+          <option value="XS">XS</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+          <option value="XXL">XXL</option>
+          <option value="XXXL">XXXL</option>
+          <option value="4XL">4XL</option>
+          <option value="5XL">5XL</option>
+        </select>
+        <div class="form-error">Ukuran jersey wajib dipilih</div>
+      </div>
     `;
 
     additionalParticipantsContainer.appendChild(fieldSet);
@@ -131,15 +182,22 @@ document.addEventListener('DOMContentLoaded', () => {
     fieldSet.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     // Add listener to new input
-    const input = fieldSet.querySelector('input');
-    input.addEventListener('focus', () => {
-      input.closest('.form-group').classList.add('focused');
-    });
-    input.addEventListener('blur', () => {
-      input.closest('.form-group').classList.remove('focused');
-    });
-    input.addEventListener('input', () => {
-      input.closest('.form-group').classList.remove('error');
+    const inputs = fieldSet.querySelectorAll('input, select');
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.closest('.form-group').classList.add('focused');
+      });
+      input.addEventListener('blur', () => {
+        input.closest('.form-group').classList.remove('focused');
+      });
+      input.addEventListener('input', () => {
+        input.closest('.form-group').classList.remove('error');
+      });
+      if (input.tagName === 'SELECT') {
+        input.addEventListener('change', () => {
+          input.closest('.form-group').classList.remove('error');
+        });
+      }
     });
   }
 
@@ -251,10 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainName = document.getElementById('regName').value.trim();
     const phoneRaw = document.getElementById('regPhone').value.trim();
     const phone = normalizePhone(phoneRaw);
-
-    const additionalNames = Array.from(document.querySelectorAll('.additional-name-input'))
-      .map(input => input.value.trim())
-      .filter(name => name !== '');
+    const mainSize = document.getElementById('regSize') ? document.getElementById('regSize').value : "";
 
     let hasError = false;
 
@@ -268,14 +323,26 @@ document.addEventListener('DOMContentLoaded', () => {
       hasError = true;
     }
 
-    // Check additional names visibility & count
-    const visibleAdditionalInputs = document.querySelectorAll('.additional-name-input');
-    visibleAdditionalInputs.forEach(input => {
-      if (!input.value.trim()) {
-        input.closest('.form-group').classList.add('error');
+    // Check additional names & sizes visibility & count
+    const visibleParticipants = document.querySelectorAll('.participant-field');
+    visibleParticipants.forEach(field => {
+      const nameInput = field.querySelector('.additional-name-input');
+      const sizeInput = field.querySelector('.additional-size-input');
+
+      if (!nameInput.value.trim()) {
+        nameInput.closest('.form-group').classList.add('error');
+        hasError = true;
+      }
+      if (!sizeInput.value) {
+        sizeInput.closest('.form-group').classList.add('error');
         hasError = true;
       }
     });
+
+    if (!mainSize) {
+      document.getElementById('regSize').closest('.form-group').classList.add('error');
+      hasError = true;
+    }
 
     if (!photoDataURL) {
       document.getElementById('regPhoto').closest('.form-group').classList.add('error');
@@ -325,6 +392,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // SAVE DATA
         const totalBiaya = currentPax * PRICE_PER_PAX;
+        
+        // Final collection check right before DB call
+        const finalSizes = [
+          document.getElementById('regSize') ? document.getElementById('regSize').value : "",
+          ...Array.from(document.querySelectorAll('.additional-size-input')).map(input => input.value)
+        ].filter(s => s && s.trim() !== "");
+
+        const finalAdditionalNames = Array.from(document.querySelectorAll('.additional-name-input'))
+          .map(input => input.value.trim())
+          .filter(n => n !== "");
+
         const { error: dbError } = await supabase
           .from('participants')
           .insert([
@@ -333,15 +411,16 @@ document.addEventListener('DOMContentLoaded', () => {
               phone: phone,
               photo_url: publicUrl,
               jumlah_pax: currentPax,
-              additional_participants: additionalNames,
-              total_biaya: totalBiaya
+              additional_participants: finalAdditionalNames,
+              total_biaya: totalBiaya,
+              sizes: finalSizes
             }
           ]);
 
         if (dbError) throw dbError;
 
         // Success Flow
-        showSuccess(mainName, currentPax, additionalNames, totalBiaya);
+        showSuccess(mainName, currentPax, finalAdditionalNames, totalBiaya, finalSizes);
 
       } catch (err) {
         console.error('Registration error:', err);
@@ -361,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // SUCCESS & WHATSAPP REDIRECT
   // ==========================================
 
-  function showSuccess(mainName, pax, others, total) {
+  function showSuccess(mainName, pax, others, total, sizes) {
     const overlay = document.getElementById('successOverlay');
     const countdownEl = document.getElementById('countdown');
 
@@ -369,9 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'hidden';
 
     // WA Message Construction
-    let detailList = `1. ${mainName}`;
+    let detailList = `1. ${mainName} (Size: ${sizes[0]})`;
     others.forEach((name, idx) => {
-      detailList += `\n${idx + 2}. ${name}`;
+      const size = sizes[idx + 1] || '-';
+      detailList += `\n${idx + 2}. ${name} (Size: ${size})`;
     });
 
     const message = `_Mohon kirim pesan ini tanpa mengedit teks._

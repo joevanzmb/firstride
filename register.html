@@ -122,6 +122,34 @@
             <div class="form-error" id="nameError">Nama wajib diisi</div>
           </div>
 
+          <!-- Size Field (Main) -->
+          <div class="form-group">
+            <div class="label-flex">
+              <label for="regSize" class="form-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.62 1.96V14a2 2 0 002 2h2v4a2 2 0 002 2h8a2 2 0 002-2v-4h2a2 2 0 002-2V5.42a2 2 0 00-1.62-1.96z" />
+                </svg>
+                Size Jersey <span class="required">*</span>
+              </label>
+              <button type="button" class="btn-size-chart" id="openSizeChart">Lihat Size Chart</button>
+            </div>
+            <select id="regSize" name="size" class="form-input form-select" required>
+              <option value="" disabled selected>Pilih Ukuran</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+              <option value="XXXL">XXXL</option>
+              <option value="4XL">4XL</option>
+              <option value="5XL">5XL</option>
+            </select>
+            <div class="form-error" id="sizeError">Ukuran jersey wajib dipilih</div>
+          </div>
+
           <!-- Additional Participants Container -->
           <div id="additionalParticipants" class="additional-participants-container"></div>
 
@@ -253,6 +281,27 @@
       </div>
     </div>
   </footer>
+
+  <!-- ==================== SIZE CHART MODAL ==================== -->
+  <div class="size-modal-overlay" id="sizeChartModal">
+    <div class="size-modal-card">
+      <div class="size-modal-header">
+        <h2 class="size-modal-title">Size Chart Jersey</h2>
+        <button type="button" class="size-modal-close" id="closeSizeChart" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="size-modal-body">
+        <div class="size-chart-img-wrapper">
+          <img src="assets/images/sizechart.jpg" alt="Size Chart Jersey First Ride 2026" class="size-chart-img">
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="register.js"></script>

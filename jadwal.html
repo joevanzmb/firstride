@@ -236,8 +236,9 @@
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 15px;
+        padding: 12px 85px 12px 16px;
+        /* Added right padding to prevent overlap */
+        margin-top: 12px;
         text-decoration: none;
         transition: all var(--transition-base);
       }
@@ -249,7 +250,7 @@
       }
 
       .map-card-title {
-        font-size: 1.15rem;
+        font-size: 0.85rem;
         font-weight: 700;
         color: #fff;
         line-height: 1.2;
@@ -257,16 +258,17 @@
 
       .map-card-tag.highlighted {
         position: absolute;
-        bottom: 10px;
+        top: 50%;
         right: 12px;
-        font-size: 0.7rem;
+        transform: translateY(-50%);
+        font-size: 0.65rem;
         color: #000;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-weight: 800;
         background: var(--color-accent);
-        padding: 4px 10px;
-        border-radius: 6px;
+        padding: 4px 8px;
+        border-radius: 4px;
         display: flex;
         align-items: center;
         box-shadow: 0 4px 10px rgba(196, 148, 74, 0.3);
@@ -297,6 +299,109 @@
         height: 100%;
         border: 0;
       }
+    }
+
+    /* Image Modal / Lightbox */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      cursor: zoom-out;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .image-modal.active {
+      display: flex;
+      opacity: 1;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 85%;
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .image-modal.active .modal-content {
+      transform: scale(1);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      backdrop-filter: blur(5px);
+      transition: background 0.3s ease;
+    }
+
+    .close-modal:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .timeline-photo img {
+      cursor: zoom-in;
+      transition: transform 0.3s ease;
+    }
+
+    .timeline-photo img:hover {
+      transform: scale(1.02);
+    }
+
+    .view-route-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      padding: 6px 14px;
+      background: rgba(196, 148, 74, 0.1);
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .view-route-btn:hover {
+      background: var(--color-accent);
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(196, 148, 74, 0.4);
+    }
+
+    .day-header-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-left: 24px;
+      /* Offset the accordion icon space for true center */
     }
   </style>
 </head>
@@ -354,9 +459,19 @@
         <!-- Day 1 -->
         <div class="rundown-day detail-card">
           <div class="day-header accordion-btn" onclick="toggleAccordion(this)">
-            <div>
+            <div class="day-header-content">
               <div class="day-label">Hari Pertama</div>
               <h3 class="day-title">Sabtu, 09 Mei 2026</h3>
+              <a href="https://maps.app.goo.gl/HKoMc3GQky64DUkp7" target="_blank" class="view-route-btn"
+                onclick="event.stopPropagation()">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                  <line x1="8" y1="2" x2="8" y2="18"></line>
+                  <line x1="16" y1="6" x2="16" y2="22"></line>
+                </svg>
+                Lihat Rute Day 1
+              </a>
             </div>
             <svg class="accordion-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -370,6 +485,9 @@
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <div class="timeline-title">Titik Kumpul & Briefing</div>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/tikum.png" alt="Titik Kumpul Puri Surya Jaya">
+                </div>
                 <a href="https://maps.app.goo.gl/2K7Ppm1KD5eXeR4H6" target="_blank" class="map-link-card simple">
                   <div class="map-card-info">
                     <div class="map-card-title">Puri Surya Jaya, Gedangan</div>
@@ -384,9 +502,6 @@
                     Maps
                   </div>
                 </a>
-                <div class="timeline-photo">
-                  <img src="assets/images/itenarary/tikum.png" alt="Titik Kumpul Puri Surya Jaya">
-                </div>
               </div>
             </div>
 
@@ -406,18 +521,23 @@
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <div class="timeline-title">Coffee Break</div>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/pondoktubing.png" alt="Coffee Break Tumpang">
+                </div>
                 <a href="https://maps.app.goo.gl/2AM2nne93HycWU6N8" target="_blank" class="map-link-card simple">
                   <div class="map-card-info">
                     <div class="map-card-title">Pondok Tubing Cafe, Tumpang</div>
                   </div>
                   <div class="map-card-tag highlighted">
-                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
                     Maps
                   </div>
                 </a>
-                <div class="timeline-photo">
-                  <img src="assets/images/itenarary/pondoktubing.png" alt="Coffee Break Tumpang">
-                </div>
               </div>
             </div>
 
@@ -427,7 +547,7 @@
               <div class="timeline-content">
                 <div class="timeline-title">RIDE 2: Menuju Ranupani</div>
                 <div class="timeline-details">
-                  Perjalanan dari Tumpang menuju Ranupani (estimasi 1 jam). Melewati jalur perbukitan yang asri.
+                  Perjalanan dari Tumpang menuju Ranupani (estimasi 1 jam).
                 </div>
               </div>
             </div>
@@ -436,13 +556,25 @@
               <div class="timeline-time">11.30</div>
               <div class="timeline-dot"></div>
               <div class="timeline-content">
-                <div class="timeline-title">Pitstop Ranupani</div>
-                <div class="timeline-details">
-                  📍 Danau Ranupani. ISHOMA (Istirahat, Sholat, Makan Siang) dengan latar danau yang tenang.
-                </div>
+                <div class="timeline-title">ISHOMA - Ranupani</div>
+
                 <div class="timeline-photo">
                   <img src="assets/images/itenarary/ranupani.png" alt="Ranupani Lake">
                 </div>
+                <a href="https://maps.app.goo.gl/nJDPcaqNeVhBfmcaA" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Danau Ranupani</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Maps
+                  </div>
+                </a>
               </div>
             </div>
 
@@ -452,7 +584,7 @@
               <div class="timeline-content">
                 <div class="timeline-title">RIDE 3: Menuju Senduro</div>
                 <div class="timeline-details">
-                  Perjalanan dari Ranupani menuju Senduro (estimasi 1 jam). Turunan dan kelokan yang menantang.
+                  Perjalanan dari Ranupani menuju Senduro (estimasi 1 jam).
                 </div>
               </div>
             </div>
@@ -463,11 +595,25 @@
               <div class="timeline-content">
                 <div class="timeline-title">Pitstop Senduro</div>
                 <div class="timeline-details">
-                  📍 Siti Sundari, Senduro. Berhenti sejenak untuk menikmati pemandangan hutan pinus.
+                  Regrup dan berhenti sejenak untuk menikmati pemandangan hutan pinus.
                 </div>
                 <div class="timeline-photo">
                   <img src="assets/images/itenarary/senduro.png" alt="Hutan Pinus Siti Sundari">
                 </div>
+                <a href="https://maps.app.goo.gl/ts5tgUtDSEbSoN6r7" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Siti Sundari, Senduro</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Maps
+                  </div>
+                </a>
               </div>
             </div>
 
@@ -488,11 +634,25 @@
               <div class="timeline-content">
                 <div class="timeline-title">Tiba di Lokasi Acara</div>
                 <div class="timeline-details">
-                  📍 Kali Kebo Camping Ground, Pronojiwo. Eksplorasi area dan dokumentasi di lokasi utama.
+                  Eksplorasi area dan dokumentasi di lokasi utama.
                 </div>
                 <div class="timeline-photo">
                   <img src="assets/images/itenarary/kalikebo.png" alt="Kali Kebo View">
                 </div>
+                <a href="https://maps.app.goo.gl/bMtzsXwr5UbtTm9G6" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Kali Kebo Camping Ground, Pronojiwo</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Maps
+                  </div>
+                </a>
               </div>
             </div>
 
@@ -512,12 +672,24 @@
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <div class="timeline-title">Check-in Penginapan</div>
-                <div class="timeline-details">
-                  📍 Artha Cottages, Pronojiwo. Istirahat sejenak dan rapih-rapih setelah perjalanan jauh.
-                </div>
+
                 <div class="timeline-photo">
                   <img src="assets/images/itenarary/artha.png" alt="Artha Cottages Pronojiwo">
                 </div>
+                <a href="https://maps.app.goo.gl/4DYk3wAbjUft1XDU8" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Artha Cottages, Pronojiwo</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Maps
+                  </div>
+                </a>
               </div>
             </div>
 
@@ -538,9 +710,19 @@
         <!-- Day 2 -->
         <div class="rundown-day detail-card">
           <div class="day-header accordion-btn" onclick="toggleAccordion(this)">
-            <div>
+            <div class="day-header-content">
               <div class="day-label">Hari Kedua</div>
               <h3 class="day-title">Minggu, 10 Mei 2026</h3>
+              <a href="https://maps.app.goo.gl/PgYpqPVBW1g7tDQL7" target="_blank" class="view-route-btn"
+                onclick="event.stopPropagation()">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                  <line x1="8" y1="2" x2="8" y2="18"></line>
+                  <line x1="16" y1="6" x2="16" y2="22"></line>
+                </svg>
+                Lihat Rute Day 2
+              </a>
             </div>
             <svg class="accordion-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -553,86 +735,97 @@
               <div class="timeline-time">06.00</div>
               <div class="timeline-dot"></div>
               <div class="timeline-content">
-                <div class="timeline-title">Morning Ride & Sesi Fotografi</div>
+                <div class="timeline-title">Sarapan & Checkout</div>
                 <div class="timeline-details">
-                  Eksplorasi spot foto indah di kaki Gunung Semeru dengan motor Royal Enfield kesayangan. Ini wajib
-                  untuk koleksi foto terbaik Anda.
-                  <ul>
-                    <li>Lokasi: Area Jembatan Gladak Perak / Piket Nol</li>
-                  </ul>
+                  Sarapan pagi bersama di Penginapan dan persiapan checkout.
                 </div>
               </div>
             </div>
 
             <div class="timeline-item">
-              <div class="timeline-time">08.30</div>
+              <div class="timeline-time">07.30</div>
               <div class="timeline-dot"></div>
               <div class="timeline-content">
-                <div class="timeline-title">Sarapan Bersama</div>
+                <div class="timeline-title">RIDE 1: Start Ride ke Tumpak Sewu</div>
                 <div class="timeline-details">
-                  Kembali ke penginapan untuk sarapan pagi dan ngopi santai.
+                  Perjalanan menuju spot wisata Tumpak Sewu (estimasi 15 menit).
                 </div>
               </div>
             </div>
 
             <div class="timeline-item">
-              <div class="timeline-time">09.30</div>
+              <div class="timeline-time">07.45</div>
               <div class="timeline-dot"></div>
               <div class="timeline-content">
-                <div class="timeline-title">Persiapan Pulang (Packing)</div>
+                <div class="timeline-title">Tiba di Tumpak Sewu</div>
                 <div class="timeline-details">
-                  Merapikan barang bawaan dan persiapan check-out dari penginapan.
+                  Menikmati pemandangan air terjun Tumpak Sewu dan dokumentasi.
+                </div>
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/tumpaksewu.png" alt="Tumpak Sewu Waterfall">
+                </div>
+                <a href="https://maps.app.goo.gl/taXhFWv5FUwu5jN76" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Tumpak Sewu Waterfall</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Maps
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-time">08.15</div>
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">RIDE 2: Tumpak Sewu - Lawang</div>
+                <div class="timeline-details">
+                  Perjalanan menuju Lawang via Bululawang (estimasi 2,5 jam).
                 </div>
               </div>
             </div>
 
             <div class="timeline-item">
-              <div class="timeline-time">10.30</div>
+              <div class="timeline-time">10.45</div>
               <div class="timeline-dot"></div>
               <div class="timeline-content">
-                <div class="timeline-title">Briefing Rute Pulang</div>
-                <div class="timeline-details">
-                  Arahan dari Road Captain mengenai rute kepulangan yang akan dilalui.
+                <div class="timeline-title">ISHOMA - Pitstop Lawang</div>
+
+                <div class="timeline-photo">
+                  <img src="assets/images/itenarary/warungmungil.png" alt="Warung Mungil Lawang">
                 </div>
+                <a href="https://maps.app.goo.gl/Q2vEHQMTV2wsVgeR7" target="_blank" class="map-link-card simple">
+                  <div class="map-card-info">
+                    <div class="map-card-title">Warung Mungil, Lawang</div>
+                  </div>
+                  <div class="map-card-tag highlighted">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Maps
+                  </div>
+                </a>
+
               </div>
             </div>
 
             <div class="timeline-item">
-              <div class="timeline-time">11.00</div>
+              <div class="timeline-time">12.00</div>
               <div class="timeline-dot"></div>
               <div class="timeline-content">
-                <div class="timeline-title">Perjalanan Pulang Dimulai</div>
+                <div class="timeline-title">RIDE 3: Perjalanan Pulang ke Surabaya</div>
                 <div class="timeline-details">
-                  Konvoi bergerak kembali menuju Surabaya.
-                  <ul>
-                    <li>Rute Utama: Lumajang - Probolinggo - Pasuruan - Sidoarjo</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-time">13.30</div>
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <div class="timeline-title">Istirahat & Makan Siang</div>
-                <div class="timeline-details">
-                  Rehat makan siang di jalur kepulangan, sekaligus perpisahan secara informal sebelum kembali ke rumah
-                  masing-masing.
-                </div>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-time">16.30</div>
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <div class="timeline-title">Tiba di Surabaya (Acara Selesai)</div>
-                <div class="timeline-details">
-                  Konvoi sampai di titik akhir. Peserta kembali dengan kenangan tak terlupakan.
-                  <ul>
-                    <li>Estimasi tiba di titik kumpul awal / Sidoarjo.</li>
-                  </ul>
+                  Perjalanan akhir menuju Surabaya (estimasi 2 jam).
                 </div>
               </div>
             </div>
@@ -707,7 +900,47 @@
       const parent = element.parentElement;
       parent.classList.toggle('active');
     }
+    // Lightbox Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const imageModal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImg');
+      const closeBtn = document.querySelector('.close-modal');
+      const itineraryImages = document.querySelectorAll('.timeline-photo img');
+
+      if (!imageModal || !modalImg || !closeBtn) return;
+
+      itineraryImages.forEach(img => {
+        img.addEventListener('click', () => {
+          imageModal.classList.add('active');
+          modalImg.src = img.src;
+          document.body.style.overflow = 'hidden'; // Stop scrolling
+        });
+      });
+
+      const closeModal = () => {
+        imageModal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+      };
+
+      closeBtn.addEventListener('click', closeModal);
+      imageModal.addEventListener('click', (e) => {
+        if (e.target !== modalImg) closeModal();
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+    });
   </script>
+
+  <!-- Lightbox Modal -->
+  <div id="imageModal" class="image-modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImg">
+  </div>
 </body>
 
 </html>
