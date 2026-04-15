@@ -477,6 +477,7 @@ ${detailList}
 *Rp ${formatK(total)}K*
 ━━━━━━━━
 
+
 Mohon info pembayaran selanjutnya. Terima kasih.
 
 
