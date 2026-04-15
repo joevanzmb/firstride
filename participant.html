@@ -56,7 +56,8 @@
       padding: 4px;
       border-radius: 100px;
       border: 1px solid var(--color-border);
-      position: relative; /* Base for sliding pill */
+      position: relative;
+      /* Base for sliding pill */
     }
 
     .view-tab {
@@ -70,8 +71,10 @@
       color: var(--color-text-muted);
       transition: color 0.3s ease;
       white-space: nowrap;
-      z-index: 2; /* Sit above the sliding pill */
-      min-width: 120px; /* Ensure equal width for smoother slide */
+      z-index: 2;
+      /* Sit above the sliding pill */
+      min-width: 120px;
+      /* Ensure equal width for smoother slide */
     }
 
     .view-tab.active {
@@ -235,7 +238,8 @@
       border-radius: 100px;
       border: 1px solid var(--color-border);
       flex-shrink: 0;
-      position: relative; /* Base for sliding pill */
+      position: relative;
+      /* Base for sliding pill */
     }
 
     .filter-tab {
@@ -382,6 +386,7 @@
       background: rgba(255, 255, 255, 0.05);
       color: #888;
     }
+
     .loading-state {
       display: flex;
       flex-direction: column;
@@ -881,8 +886,13 @@
 
     /* ── Animations ── */
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .btn-reload-top.loading svg {
@@ -891,8 +901,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .view-animate {
@@ -1225,7 +1242,7 @@
     function setView(v) {
       if (currentView === v) return;
       currentView = v;
-      
+
       // Update Tab UI
       document.getElementById('tabTransaksi').classList.toggle('active', v === 'transaksi');
       document.getElementById('tabSize').classList.toggle('active', v === 'size');
@@ -1349,7 +1366,7 @@
     function refreshData() {
       const btn = document.querySelector('.btn-reload-top');
       if (btn.classList.contains('loading')) return;
-      
+
       btn.classList.add('loading');
       fetchData().finally(() => {
         // Biarkan animasi settle sejenak agar terlihat smooth
@@ -1361,7 +1378,13 @@
     document.getElementById('closeModal').onclick = () => document.getElementById('photoModal').classList.remove('active');
     document.getElementById('photoModal').onclick = (e) => { if (e.target === document.getElementById('photoModal')) document.getElementById('photoModal').classList.remove('active'); };
 
-    window.addEventListener('resize', updateDashboard);
+    let lastWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+      if (window.innerWidth !== lastWidth) {
+        lastWidth = window.innerWidth;
+        updateDashboard();
+      }
+    });
 
     fetchData();
   </script>
