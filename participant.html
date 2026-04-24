@@ -261,12 +261,19 @@
       color: black;
     }
 
+    .filter-tab span {
+      opacity: 0.7;
+      font-size: 0.9em;
+      margin-left: 2px;
+      font-weight: 500;
+    }
+
     .filter-highlight {
       position: absolute;
       top: 3px;
       bottom: 3px;
       left: 3px;
-      width: calc(33.33% - 2px);
+      width: calc(25% - 2px);
       background: var(--color-accent);
       border-radius: 100px;
       transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -477,12 +484,12 @@
       .filter-tabs {
         width: 100%;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         position: relative;
       }
 
       .filter-highlight {
-        width: calc(33.33% - 2px);
+        width: calc(25% - 2px);
       }
 
       .filter-tab {
@@ -992,9 +999,10 @@
         </div>
         <div class="filter-tabs">
           <div class="filter-highlight" id="filterHighlight"></div>
-          <button class="filter-tab active" onclick="setFilter('all')">Semua</button>
-          <button class="filter-tab" onclick="setFilter('Paid')">Lunas</button>
-          <button class="filter-tab" onclick="setFilter('Waiting Payment')">Pending</button>
+          <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">Semua <span id="countAll"></span></button>
+          <button class="filter-tab" data-filter="Paid" onclick="setFilter('Paid')">Lunas <span id="countPaid"></span></button>
+          <button class="filter-tab" data-filter="Waiting Payment" onclick="setFilter('Waiting Payment')">Pending <span id="countPending"></span></button>
+          <button class="filter-tab" data-filter="multipax" onclick="setFilter('multipax')">>1 Pax <span id="countMulti"></span></button>
         </div>
       </div>
     </div>
@@ -1058,7 +1066,15 @@
 
     function updateDashboard() {
       const filtered = allParticipants.filter(p => {
-        const matchesFilter = currentFilter === 'all' || p.payment_status === currentFilter;
+        let matchesFilter = false;
+        if (currentFilter === 'all') {
+          matchesFilter = true;
+        } else if (currentFilter === 'Paid' || currentFilter === 'Waiting Payment') {
+          matchesFilter = (p.payment_status || 'Waiting Payment') === currentFilter;
+        } else if (currentFilter === 'multipax') {
+          matchesFilter = (p.jumlah_pax || 1) > 1;
+        }
+
         const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesFilter && matchesSearch;
       });
@@ -1084,8 +1100,11 @@
           acc.totalPending += (row.total_biaya || 0);
           acc.countPending++;
         }
+        if ((row.jumlah_pax || 1) > 1) {
+          acc.countMultiPax++;
+        }
         return acc;
-      }, { totalPax: 0, totalRevenue: 0, totalPending: 0, countPaid: 0, countPending: 0 });
+      }, { totalPax: 0, totalRevenue: 0, totalPending: 0, countPaid: 0, countPending: 0, countMultiPax: 0 });
 
       document.getElementById('statTransactions').textContent = allParticipants.length;
       document.getElementById('statTotalPax').textContent = stats.totalPax;
@@ -1093,6 +1112,12 @@
       document.getElementById('statCountPending').textContent = stats.countPending;
       document.getElementById('statTotalRevenue').textContent = formatRupiah(stats.totalRevenue);
       document.getElementById('statTotalPending').textContent = `Waiting: ${formatRupiah(stats.totalPending)}`;
+
+      // Update Filter Tab Counts
+      document.getElementById('countAll').textContent = `(${allParticipants.length})`;
+      document.getElementById('countPaid').textContent = `(${stats.countPaid})`;
+      document.getElementById('countPending').textContent = `(${stats.countPending})`;
+      document.getElementById('countMulti').textContent = `(${stats.countMultiPax})`;
     }
 
     function renderListView(data) {
@@ -1219,11 +1244,8 @@
       let idx = 0;
 
       tabs.forEach((t, i) => {
-        const text = t.textContent.toLowerCase();
-        let isActive = false;
-        if (f === 'all' && text === 'semua') { isActive = true; idx = i; }
-        if (f === 'Paid' && text === 'lunas') { isActive = true; idx = i; }
-        if (f === 'Waiting Payment' && text === 'pending') { isActive = true; idx = i; }
+        const isActive = t.dataset.filter === f;
+        if (isActive) idx = i;
         t.classList.toggle('active', isActive);
       });
 
